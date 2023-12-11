@@ -18,7 +18,7 @@
     ·
     <a href="https://www.vision.rwth-aachen.de/person/216/"><strong>Jonathon Luiten</strong></a>
   </p>
-  <h3 align="center"><a href="">Paper</a> | <a href="">Video</a> | <a href="https://spla-tam.github.io/">Project Page</a></h3>
+  <h3 align="center"><a href="https://arxiv.org/pdf/2312.02126.pdf">Paper</a> | <a href="https://youtu.be/jWLI-OFp3qU">Video</a> | <a href="https://spla-tam.github.io/">Project Page</a></h3>
   <div align="center"></div>
 </p>
 
@@ -65,13 +65,55 @@
 
 ## Installation
 
-First, you have to make sure that you have all dependencies in place.
-The simplest way is to use [anaconda](https://www.anaconda.com/). 
+##### (Recommended)
+SplaTAM has been tested on python 3.10, CUDA>=11.6. The simplest way to install all dependences is to use [anaconda](https://www.anaconda.com/) and [pip](https://pypi.org/project/pip/) in the following steps: 
 
-You can create an anaconda environment called `splatam`.
+```bash
+conda create -n splatam python=3.10
+conda activate splatam
+conda install -c "nvidia/label/cuda-11.6.0" cuda-toolkit
+conda install pytorch==1.12.1 torchvision==0.13.1 torchaudio==0.12.1 cudatoolkit=11.6 -c pytorch -c conda-forge
+pip install -r requirements.txt
+```
+
+Alternatively, we also provide a conda environment.yml file :
 ```bash
 conda env create -f environment.yml
 conda activate splatam
+```
+
+#### Windows
+
+For installation on Windows using Git bash, please refer to the [instructions shared in Issue#9](https://github.com/spla-tam/SplaTAM/issues/9#issuecomment-1848348403).
+
+#### Docker and Singularity Setup
+
+We also provide a docker image. We recommend using a venv to run the code inside a docker image:
+
+
+```bash
+docker pull nkeetha/splatam:v1
+bash bash_scripts/docker_start.bash
+cd /SplaTAM/
+pip install virtualenv --user
+mkdir venv
+cd venv
+virtualenv splatam --system-site-packages
+pip install -r venv_requirements.txt
+```
+
+Setting up a singularity container is similar:
+```bash
+cd </path/to/singularity/folder/
+singularity pull splatam.sif docker://nkeetha/splatam:v1
+singularity instance start --nv splatam.sif splatam
+singularity run --nv instance://gradslam_2
+cd <path/to/SplaTAM/>
+pip install virtualenv --user
+mkdir venv
+cd venv
+virtualenv splatam --system-site-packages
+pip install -r venv_requirements.txt
 ```
 
 ## Demo
@@ -205,7 +247,10 @@ scene0207_00
 
 ### ScanNet++
 
-Please follow the data downloading and image undistortion procedure on the <a href="https://kaldir.vc.in.tum.de/scannetpp/">ScanNet++</a> website. We use the following sequences: 
+Please follow the data downloading and image undistortion procedure on the <a href="https://kaldir.vc.in.tum.de/scannetpp/">ScanNet++</a> website. 
+Additionally for undistorting the DSLR depth images, we use our <a href="https://github.com/Nik-V9/scannetpp">own variant of the official ScanNet++ processing code</a>. We will open a pull request to the official ScanNet++ repository soon.
+
+We use the following sequences: 
 
 ```
 8b5caf3398
